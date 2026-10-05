@@ -1,0 +1,157 @@
+import { NavLink } from 'react-router-dom';
+
+interface SidebarProps {
+  mobileOpen: boolean;
+  onClose: () => void;
+}
+
+const NAV_ITEMS = [
+  { to: '/', label: 'Dashboard', icon: '▦', end: true },
+  { to: '/markets', label: 'Live Markets', icon: '◈' },
+  { to: '/signals', label: 'AI Signals', icon: '✦' },
+  { to: '/news', label: 'News & Events', icon: '📰' },
+  { to: '/liquidity', label: 'Liquidity & Volume', icon: '≣' },
+  { to: '/chat', label: 'AI Trading Chat', icon: '💬' },
+  { to: '/screenshot', label: 'Screenshot Analysis', icon: '🖼' },
+  { to: '/settings', label: 'Settings', icon: '⚙' },
+];
+
+export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
+  return (
+    <>
+      <aside className={`wm-sidebar ${mobileOpen ? 'open' : ''}`}>
+        <div className="wm-brand">
+          <div className="wm-logo">W</div>
+          <div>
+            <div className="wm-brand-name">WealthMind4x</div>
+            <div className="wm-brand-sub">AI Trading Terminal</div>
+          </div>
+        </div>
+
+        <nav className="wm-nav">
+          {NAV_ITEMS.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.end}
+              onClick={onClose}
+              className={({ isActive }) =>
+                `wm-nav-item ${isActive ? 'active' : ''}`
+              }
+            >
+              <span className="wm-nav-icon">{item.icon}</span>
+              <span>{item.label}</span>
+            </NavLink>
+          ))}
+        </nav>
+
+        <div className="wm-sidebar-footer">
+          <div className="wm-env-tag">LIVE-READY FOUNDATION</div>
+        </div>
+      </aside>
+
+      {mobileOpen && <div className="wm-overlay" onClick={onClose} />}
+
+      <style>{`
+        .wm-sidebar {
+          width: 240px;
+          background: var(--bg-1);
+          border-right: 1px solid var(--border);
+          display: flex;
+          flex-direction: column;
+          flex-shrink: 0;
+          z-index: 30;
+        }
+        .wm-brand {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 16px;
+          border-bottom: 1px solid var(--border);
+        }
+        .wm-logo {
+          width: 34px;
+          height: 34px;
+          border-radius: 8px;
+          background: linear-gradient(135deg, #4f9cff, #6ee7b7);
+          color: #06101f;
+          font-weight: 800;
+          display: grid;
+          place-items: center;
+          font-size: 16px;
+        }
+        .wm-brand-name {
+          font-weight: 700;
+          font-size: 14px;
+          letter-spacing: 0.2px;
+        }
+        .wm-brand-sub {
+          font-size: 11px;
+          color: var(--text-2);
+        }
+        .wm-nav {
+          flex: 1;
+          overflow-y: auto;
+          padding: 10px 8px;
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+        .wm-nav-item {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 9px 12px;
+          border-radius: var(--radius-sm);
+          color: var(--text-1);
+          font-size: 13px;
+          transition: background 0.12s ease, color 0.12s ease;
+        }
+        .wm-nav-item:hover {
+          background: var(--bg-2);
+          color: var(--text-0);
+        }
+        .wm-nav-item.active {
+          background: rgba(79, 156, 255, 0.12);
+          color: var(--text-0);
+          box-shadow: inset 2px 0 0 var(--accent);
+        }
+        .wm-nav-icon {
+          width: 18px;
+          text-align: center;
+          font-size: 13px;
+        }
+        .wm-sidebar-footer {
+          padding: 12px 16px;
+          border-top: 1px solid var(--border);
+        }
+        .wm-env-tag {
+          font-size: 10px;
+          letter-spacing: 0.8px;
+          color: var(--text-2);
+          text-align: center;
+        }
+        .wm-overlay {
+          display: none;
+          position: fixed;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.5);
+          z-index: 20;
+        }
+        @media (max-width: 900px) {
+          .wm-sidebar {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            transform: translateX(-100%);
+            transition: transform 0.2s ease;
+            box-shadow: var(--shadow);
+          }
+          .wm-sidebar.open { transform: translateX(0); }
+          .wm-overlay { display: block; }
+        }
+      `}</style>
+    </>
+  );
+}
