@@ -1,0 +1,28 @@
+import type { MarketDataProvider } from './MarketDataProvider';
+
+class ProviderRegistry {
+  private providers = new Map<string, MarketDataProvider>();
+  private activeId: string | null = null;
+
+  register(provider: MarketDataProvider): void {
+    this.providers.set(provider.id, provider);
+  }
+
+  setActive(id: string): void {
+    if (!this.providers.has(id)) {
+      throw new Error(`Market provider "${id}" is not registered.`);
+    }
+    this.activeId = id;
+  }
+
+  getActive(): MarketDataProvider | null {
+    if (!this.activeId) return null;
+    return this.providers.get(this.activeId) ?? null;
+  }
+
+  list(): MarketDataProvider[] {
+    return [...this.providers.values()];
+  }
+}
+
+export const providerRegistry = new ProviderRegistry();
